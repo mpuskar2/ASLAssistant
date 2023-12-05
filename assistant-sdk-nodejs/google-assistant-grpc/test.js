@@ -10,12 +10,27 @@ const CREDENTIALS = {
 
 const assistant = new GoogleAssistant(CREDENTIALS);
 
-assistant.assist('what time is it')
-  .then(({ text }) => {
-    console.log(text); // Will log "It's 12:30"
-  });
+const express = require('express');
+const app = express();
+const port = 4000;
+const router = express.Router();
 
-assistant.assist('tell me a joke')
+// Set up front end
+app.use('/', express.static('static'));
+
+app.get('/send/:message', (req, res) => {
+  // This should eventually take the camera input frames and send them to the model
+  // Get back response from model and input to assistant, send back to frontend
+  
+  const mes = req.params.message;
+  console.log(mes);
+  assistant.assist(mes)
   .then(({ text }) => {
     console.log(text);
+    res.send(text);
+  });
+});
+
+app.listen(port, () => {
+  console.log(`ASL App listening on port ${port}`);
 });

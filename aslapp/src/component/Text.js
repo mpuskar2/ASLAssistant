@@ -7,17 +7,24 @@ export default function Text() {
     let inVal = document.getElementById("chatbox-input-text").value;
     let div = document.getElementById("titleDiv");
     let input = document.createElement("output");
-    input.value = inVal;
+    input.value = "You: " + inVal;
     div.appendChild(input);
     div.appendChild(br);
-    addOutput("output");
+
+    // Sends the typed text to the backend and receive a response from the assistant
+    // This should eventually show the signed input as text and appropriate response
+    let path = "/send/" + inVal;
+    fetch(path).then(res => res.text()
+    .then(data => {
+      addOutput(data);
+    }));
   }
 
   function addOutput(outVal){
     let br = document.createElement("br");
     let div = document.getElementById("titleDiv");
     let output = document.createElement("output");
-    output.value = outVal;
+    output.value = "Google Assistant: " + outVal;
     div.appendChild(output);
     div.appendChild(br);
     
