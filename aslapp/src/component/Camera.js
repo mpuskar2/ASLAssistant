@@ -41,7 +41,36 @@ export default function Camera() {
     startVideoStream();
   };
   
-  // Start the video stream initially
+  // Check if camera is enabled
+  const isCameraRunning = () => {
+    return currentStream !== undefined && currentStream.active;
+  };
+
+  // Capture an image
+  const captureImage = () => {
+    if (isCameraRunning()) {
+      let video = videoRef.current;
+      let canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth; // set image width
+      canvas.height = video.videoHeight; // set image height
+      let context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Convert the canvas to an image
+      let image = new Image();
+      image.src = canvas.toDataURL('image/png');
+
+      // Display image in the page body
+      // This should go to the model input once connected
+      document.body.removeChild(document.body.lastChild);
+      document.body.appendChild(image);
+    }
+  };
+
+  // Capture an image every 83 ms ~ 12 fps
+  setInterval(() => {
+    captureImage();
+  }, 83);
 
   return(
     <>
