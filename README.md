@@ -1,4 +1,4 @@
-# SE4450-Capstone
+# SE4450-Capstone: Group 17
 Capstone project - ASL Assistant
 
 Front end Node modules imports:
