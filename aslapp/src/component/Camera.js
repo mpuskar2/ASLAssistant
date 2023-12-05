@@ -3,50 +3,53 @@ import React, { useRef } from 'react';
 export default function Camera() {
 
   const videoRef = useRef(null);
-
-  // Get the camera stream
-  navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-      let video = videoRef.current;
-      video.srcObject = stream;
+  let currentStream; // Variable to store the current stream
   
-      // Add event listener for when metadata is loaded
-      video.addEventListener('loadedmetadata', () => {
-        // Mirror the video
-        video.style.transform = 'scaleX(-1)';
+  // Function to start the video stream
+  const startVideoStream = () => {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        let video = videoRef.current;
+        video.srcObject = stream;
+        currentStream = stream;
+  
+        // Add event listener for when metadata is loaded
+        video.addEventListener('loadedmetadata', () => {
+          // Mirror the video
+          video.style.transform = 'scaleX(-1)';
+        });
+  
+        video.play();
+      })
+      .catch(err => {
+        console.error(err);
       });
+  };
   
-      video.play();
-    })
-    .catch(err => {
-      console.error(err);
-    });
- // Stop the camera stream
-  function stopCamera() {
-    
-    videoRef.current.pause();
-
-  }
-
-  // function stopUsingCamera() {
-  //   // Stop using the camera.
-  //   navigator.mediaDevices.getUserMedia({video: false}).then(function(stream) {
-  //     // Stop the video stream.
-  //     stream.stop();
-  //   });
-  // }
-
-  function resumeCamera(){
-    videoRef.current.play()
-  }
+  // Function to stop the video stream
+  const stopVideoStream = () => {
+    if (currentStream) {
+      let tracks = currentStream.getTracks();
+      tracks.forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+    }
+  };
+  
+  // Function to restart the video stream
+  const restartVideoStream = () => {
+    stopVideoStream();
+    startVideoStream();
+  };
+  
+  // Start the video stream initially
 
   return(
     <>
     <center>
     <video ref={videoRef}></video>
     <br></br>
-    <button onClick={() => stopCamera()}>stop Camera</button>
-    <button onClick={() => resumeCamera()}>resume Camera</button>
+    <button onClick={() => stopVideoStream()}>Stop Camera</button>
+    <button onClick={() => restartVideoStream()}>Start Camera</button>
     </center>
     </>
   )
