@@ -22,13 +22,23 @@
     <button onClick="hideImage()">Off</button>
     <br>
   
-      <img id="videoFeed" src="{{ url_for('video_feed') }}" width="640" height="480">
+      <!--<img id="videoFeed" src="{{ url_for('video_feed') }}" width="640" height="480">-->
+
+      <video id="video" width="640" height="480" autoplay></video>
+
+      <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+    
+      <script>
+        
+    </script>
+    
+
+
   
     <br>
     <input type="text" id="chatbox-input-text" placeholder="Type your message here..." />
     <button onClick="addInput()" id="chatbox-input-submit">Send</button>
     <div id="titleDiv">
-        <p id="predictionText">Prediction Text: Loading...</p>
       </div>
       
 </body>

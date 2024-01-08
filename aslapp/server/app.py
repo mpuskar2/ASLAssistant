@@ -1,10 +1,11 @@
-from flask import Flask, jsonify, render_template, Response
+from flask import Flask, jsonify, render_template, Response, request
 from flask_cors import CORS
 import os
 import cv2
 import mediapipe as mp
 import numpy as np
 from tensorflow.keras.models import load_model
+from PIL import Image
 
 app = Flask(__name__)
 CORS(app)
@@ -61,12 +62,25 @@ def generate_frames():
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n'
                b'Content-Type: text/plain\r\n\r\n' + prediction_text.encode('utf-8') + b'\r\n')
-        
 
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    data = request.files['image']
+    pil_image = Image.open(data)
+    # Convert the PIL Image to format acceptable by cv2
+    new_image = np.array(pil_image)
+
+    # Process the image data as needed (save to disk, perform analysis, etc.)
+    # Example: Save image to disk
+    prediction_text = return_prediction(new_image)
+
+    return jsonify(prediction_text=prediction_text)
 
 
 @app.route('/video_feed')
@@ -80,10 +94,10 @@ def get_prediction_route():
     ret, frame = cap.read()
     if not ret:
         return jsonify(prediction_text="")
-    
+   
     prediction_text = return_prediction(frame)
     cap.release()
-    
+   
     return jsonify(prediction_text=prediction_text)
 
 

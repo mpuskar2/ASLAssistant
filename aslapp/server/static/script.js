@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', function() {
 } */
 
 function showImage() {
-    document.getElementById('videoFeed').style.display = 'block';
+    document.getElementById('video').style.display = 'block';
   }
 
   function hideImage() {
-    document.getElementById('videoFeed').style.display = 'none';
+    document.getElementById('video').style.display = 'none';
   }
 /*
   document.addEventListener("DOMContentLoaded", function () {
@@ -84,6 +84,52 @@ function addInputSign(prediction){
     }));
   }
 
+// BEAST MODE
+var video = document.getElementById('video');
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+    
+navigator.mediaDevices.getUserMedia({ video: true })
+    .then(function (stream) {
+        video.srcObject = stream;
+    })
+    .catch(function (error) {
+        console.error('Error accessing webcam:', error);
+    });
+
+function captureFrame() {
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Convert the canvas image to a Blob
+    canvas.toBlob(function (blob) {
+        // Create a FormData object and append the Blob
+        const formData = new FormData();
+        formData.append('image', blob, 'image.jpg');
+
+        // Make a POST request using fetch
+        fetch('/upload', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response from the server
+                console.log('Prediction:', data.prediction_text);
+                //document.getElementById('predictionText').textContent = 'Prediction Text: ' + data.prediction_text;
+                if (data.prediction_text && typeof data.prediction_text === 'string' && data.prediction_text.trim() !== '') {
+                    addInputSign(data.prediction_text);
+                } else {
+                    // Handle the case where data.prediction_text is null, undefined, or an empty string
+                    console.log("No sign detected");
+                }
+                })
+            .catch(error => {
+                console.error('Error uploading the image:', error);
+            });
+    }, 'image/jpeg'); // Specify the desired MIME type (image/jpeg in this case)
+}
+
+/*
 function callApi() {
     fetch('http://localhost:5000/get_prediction')
         .then(response => {
@@ -109,5 +155,8 @@ function callApi() {
 }
 
 
+*/
+
 // Call the API every 5 seconds
-setInterval(callApi, 5000);
+setInterval(captureFrame, 5000);
+
