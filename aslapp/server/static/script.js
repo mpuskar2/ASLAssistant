@@ -6,19 +6,21 @@ document.addEventListener('DOMContentLoaded', function() {
   function addInput(){
     let br = document.createElement("br");
     let inVal = document.getElementById("chatbox-input-text").value;
-    let div = document.getElementById("titleDiv");
-    let input = document.createElement("output");
-    input.value = "You: " + inVal;
-    div.appendChild(input);
-    div.appendChild(br);
-
-    // Sends the typed text to the backend and receive a response from the assistant
-    // This should eventually show the signed input as text and appropriate response
-    let path = window.location.protocol + "//" + window.location.hostname + ":4000/send/" + inVal;
-    fetch(path).then(res => res.text()
-    .then(data => {
-      addOutput(data);
-    }));
+    if (inVal !== "") {
+        let div = document.getElementById("titleDiv");
+        let input = document.createElement("output");
+        input.value = "You: " + inVal;
+        div.appendChild(input);
+        div.appendChild(br);
+    
+        // Sends the typed text to the backend and receive a response from the assistant
+        // This should eventually show the signed input as text and appropriate response
+        let path = window.location.protocol + "//" + window.location.hostname + ":4000/send/" + inVal;
+        fetch(path).then(res => res.text()
+        .then(data => {
+          addOutput(data);
+        }));
+    }
   }
 
   function addOutput(outVal){
