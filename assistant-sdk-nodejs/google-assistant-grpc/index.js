@@ -18,6 +18,14 @@ const router = express.Router();
 // Set up front end
 app.use('/', express.static('static'));
 
+// Enable CORS for all routes
+ app.use((req, res, next) => {
+   res.header('Access-Control-Allow-Origin', '*'); // should replace '*' with frontend's actual origin
+   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+   res.header('Access-Control-Allow-Headers', 'Content-Type');
+   next();
+ });
+
 app.get('/send/:message', (req, res) => {
   // This should eventually take the camera input frames and send them to the model
   // Get back response from model and input to assistant, send back to frontend

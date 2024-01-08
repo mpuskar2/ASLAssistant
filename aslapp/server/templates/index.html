@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Set the base URL as a global variable
+        const baseUrl = "{{ url_for('video_feed') }}";
+    </script>
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+    <title>ASL Model</title>
+    <style>
+        #videoContainer {
+          display: none;
+        }
+      </style>
+</head>
+<body>
+    <h1>ASL Model Prediction</h1>
+    <button onClick="showImage()">On</button>
+    <button onClick="hideImage()">Off</button>
+    <br>
+  
+      <img id="videoFeed" src="{{ url_for('video_feed') }}" width="640" height="480">
+  
+    <br>
+    <input type="text" id="chatbox-input-text" placeholder="Type your message here..." />
+    <button onClick="addInput()" id="chatbox-input-submit">Send</button>
+    <div id="titleDiv">
+        <p id="predictionText">Prediction Text: Loading...</p>
+      </div>
+      
+</body>
+</html>
+
+
+
