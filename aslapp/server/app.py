@@ -19,7 +19,7 @@ letters = [d for d in os.listdir(DATA_PATH) if os.path.isdir(os.path.join(DATA_P
 
 model = load_model('../../model/Models/ASL_model.h5')
 
-
+# Returns ASL sign detected in frame as text
 def return_prediction(frame):
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     res = hands.process(frame_rgb)
@@ -34,40 +34,9 @@ def return_prediction(frame):
             predict_text = letters[np.argmax(pred)]
     return predict_text
 
-
-def generate_frames():
-    cap = cv2.VideoCapture(0)
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if not ret:
-            break
-
-        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        res = hands.process(frame_rgb)
-
-        prediction_text = ""
-        if res.multi_hand_landmarks:
-            for hand_landmarks in res.multi_hand_landmarks:
-                mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS,
-                                          mp_drawing.DrawingSpec(color=(255, 0, 0), thickness=5, circle_radius=4),
-                                          mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=3, circle_radius=2))
-
-        prediction_text = return_prediction(frame)
-        cv2.putText(frame, prediction_text, (120, 140 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3,
-                    cv2.LINE_AA)
-
-        _, buffer = cv2.imencode('.jpg', frame)
-        frame = buffer.tobytes()
-
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n'
-               b'Content-Type: text/plain\r\n\r\n' + prediction_text.encode('utf-8') + b'\r\n')
-
-
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -75,31 +44,8 @@ def upload():
     pil_image = Image.open(data)
     # Convert the PIL Image to format acceptable by cv2
     new_image = np.array(pil_image)
-
-    # Process the image data as needed (save to disk, perform analysis, etc.)
-    # Example: Save image to disk
     prediction_text = return_prediction(new_image)
-
     return jsonify(prediction_text=prediction_text)
-
-
-@app.route('/video_feed')
-def video_feed():
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-
-@app.route('/get_prediction')
-def get_prediction_route():
-    cap = cv2.VideoCapture(0)
-    ret, frame = cap.read()
-    if not ret:
-        return jsonify(prediction_text="")
-   
-    prediction_text = return_prediction(frame)
-    cap.release()
-   
-    return jsonify(prediction_text=prediction_text)
-
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
