@@ -40,6 +40,10 @@ export default function Text() {
     synth.speak(utterance);
   }
 
+  function clearChatLog() {
+    document.getElementById("titleDiv").innerHTML = "";
+  }
+
   return (
     <>
       <input type="text" id="chatbox-input-text" placeholder="Type your message here..." />
@@ -47,6 +51,7 @@ export default function Text() {
       <button onClick={() => setTextToSpeechEnabled(!textToSpeechEnabled)}>
         {textToSpeechEnabled ? 'Disable Text-to-Speech' : 'Enable Text-to-Speech'}
       </button>
+      <button onClick={() => clearChatLog()}>Clear Chat</button>
       <div id="titleDiv"></div>
     </>
   );
