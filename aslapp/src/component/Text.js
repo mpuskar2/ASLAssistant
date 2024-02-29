@@ -1,14 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function Text() {
-  
-  function addInput(){
-    // For testing purposes, inVal represents the model output
+  const [textToSpeechEnabled, setTextToSpeechEnabled] = useState(false);
+
+  function addInput() {
     let br = document.createElement("br");
     let inVal = document.getElementById("chatbox-input-text").value;
 
-    // Sends the typed text to the backend and receive a response from the assistant
-    // This should eventually show the signed input as text and appropriate response
     if (inVal !== "") {
       let div = document.getElementById("titleDiv");
       let input = document.createElement("output");
@@ -16,34 +14,40 @@ export default function Text() {
       div.appendChild(input);
       div.appendChild(br);
       let path = "/send/" + inVal;
-      fetch(path).then(res => res.text()
-      .then(data => {
-        addOutput(data);
-      }));
+      fetch(path)
+        .then(res => res.text())
+        .then(data => {
+          addOutput(data);
+          if (textToSpeechEnabled) {
+            speak(data);
+          }
+        });
     }
   }
 
-  function addOutput(outVal){
+  function addOutput(outVal) {
     let br = document.createElement("br");
     let div = document.getElementById("titleDiv");
     let output = document.createElement("output");
     output.value = "Google Assistant: " + outVal;
     div.appendChild(output);
     div.appendChild(br);
-    
   }
 
-  
+  function speak(text) {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(text);
+    synth.speak(utterance);
+  }
 
-
-    return (
-      <>
+  return (
+    <>
       <input type="text" id="chatbox-input-text" placeholder="Type your message here..." />
       <button onClick={() => addInput()} id="chatbox-input-submit">Send</button>
-      <div id="titleDiv">
-         
-      </div>
-      </>
-    )
-  }
-  
+      <button onClick={() => setTextToSpeechEnabled(!textToSpeechEnabled)}>
+        {textToSpeechEnabled ? 'Disable Text-to-Speech' : 'Enable Text-to-Speech'}
+      </button>
+      <div id="titleDiv"></div>
+    </>
+  );
+}
