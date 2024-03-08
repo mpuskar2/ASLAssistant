@@ -1,5 +1,33 @@
 import React, { useState } from 'react';
 
+const letters = {
+  "a":"",
+  "b":"",
+  "c":"",
+  "d":"",
+  "e":"",
+  "f":"",
+  "g":"",
+  "h":"hi",
+  "i":"",
+  "k":"",
+  "l":"",
+  "m":"",
+  "n":"",
+  "o":"",
+  "p":"",
+  "q":"",
+  "r":"",
+  "s":"",
+  "t":"test",
+  "u":"",
+  "v":"",
+  "w":"weather",
+  "x":"",
+  "y":"",
+};
+
+
 export default function Text() {
   const [textToSpeechEnabled, setTextToSpeechEnabled] = useState(false);
 
@@ -10,10 +38,10 @@ export default function Text() {
     if (inVal !== "") {
       let div = document.getElementById("titleDiv");
       let input = document.createElement("output");
-      input.value = "You: " + inVal;
+      input.value = "You: " + letters[inVal];
       div.appendChild(input);
       div.appendChild(br);
-      let path = "/send/" + inVal;
+      let path = window.location.protocol + "//" + window.location.hostname + ":4000/send/" + letters[inVal];
       fetch(path)
         .then(res => res.text())
         .then(data => {

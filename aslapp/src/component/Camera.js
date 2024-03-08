@@ -1,5 +1,31 @@
 import React, { useRef, useState, useEffect } from 'react';
-import Text from './Text';
+
+const letters = {
+  "a":"",
+  "b":"",
+  "c":"",
+  "d":"",
+  "e":"",
+  "f":"",
+  "g":"",
+  "h":"hi",
+  "i":"",
+  "k":"",
+  "l":"",
+  "m":"",
+  "n":"",
+  "o":"",
+  "p":"",
+  "q":"",
+  "r":"",
+  "s":"",
+  "t":"test",
+  "u":"",
+  "v":"",
+  "w":"weather",
+  "x":"",
+  "y":"",
+};
 
 export default function Camera() {
 
@@ -64,13 +90,13 @@ export default function Camera() {
     let br = document.createElement("br");
     let div = document.getElementById("titleDiv");
     let input = document.createElement("output");
-    input.value = "You: " + prediction;
+    input.value = "You: " + letters[prediction];
     div.appendChild(input);
     div.appendChild(br);
 
     // Sends the typed text to the backend and receive a response from the assistant
     // This should eventually show the signed input as text and appropriate response
-    let path = window.location.protocol + "//" + window.location.hostname + ":4000/send/" + prediction;
+    let path = window.location.protocol + "//" + window.location.hostname + ":4000/send/" + letters[prediction];
     fetch(path).then(res => res.text()
     .then(data => {
       addOutput(data);

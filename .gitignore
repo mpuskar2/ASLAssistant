@@ -1,4 +1,5 @@
 venv
+capvenv
 node_modules
 
 # assistant-sdk-nodejs
