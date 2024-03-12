@@ -1,12 +1,15 @@
+# Virual environments
 venv
 capvenv
+tenv
+
+# Node Modules
 node_modules
 
-# assistant-sdk-nodejs
+# assistant-sdk
 devicecredentials.json
-CONTRIBUTING.md
-LICENSE
-README.md
+__pycache__
+google-assistant-sdk-screen-out.html
 
 # ML model data
 model/Data
