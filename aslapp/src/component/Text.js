@@ -62,7 +62,7 @@ export default function Text() {
         {textToSpeechEnabled ? 'Disable Text-to-Speech' : 'Enable Text-to-Speech'}
       </button>
       <button onClick={() => clearChatLog()}>Clear Chat</button>
-      <div id="titleDiv"></div>
+      <div id="titleDiv" class="conversation"></div>
     </>
   );
 }

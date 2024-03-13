@@ -7,13 +7,13 @@ tenv
 node_modules
 
 # assistant-sdk
-devicecredentials.json
 __pycache__
 google-assistant-sdk-screen-out.html
 
 # ML model data
 model/Data
 model/Landmarks
+Models
 
 # aslapp
 # dependencies
