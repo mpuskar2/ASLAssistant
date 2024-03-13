@@ -1,33 +1,5 @@
 import React, { useState } from 'react';
 
-const letters = {
-  "a":"",
-  "b":"",
-  "c":"",
-  "d":"",
-  "e":"",
-  "f":"",
-  "g":"",
-  "h":"hi",
-  "i":"",
-  "k":"",
-  "l":"",
-  "m":"",
-  "n":"",
-  "o":"",
-  "p":"",
-  "q":"",
-  "r":"",
-  "s":"",
-  "t":"test",
-  "u":"",
-  "v":"",
-  "w":"weather",
-  "x":"",
-  "y":"",
-};
-
-
 export default function Text() {
   const [textToSpeechEnabled, setTextToSpeechEnabled] = useState(false);
 
@@ -38,20 +10,27 @@ export default function Text() {
     if (inVal !== "") {
       let div = document.getElementById("titleDiv");
       let input = document.createElement("output");
-      input.value = "You: " + letters[inVal];
+      input.style.color = "#fff";
+      input.value = "You: " + inVal;
       div.appendChild(input);
       div.appendChild(br);
-      let path = window.location.protocol + "//" + window.location.hostname + ":4000/send/" + letters[inVal];
+      let path = window.location.protocol + "//" + window.location.hostname + ":4000/send/" + inVal;
       fetch(path)
-        .then(res => res.text())
-        .then(data => {
-          const output = JSON.parse(data).response_text;
-          addOutput(output);
+        .then(res => res.text()
+          .then(data => {
+            const output = JSON.parse(data);
+            addOutput(output.response_text);
           
-          if (textToSpeechEnabled) {
-            speak(output);
-          }
-        });
+            if (output.response_html !== "") {
+              let html = document.createElement('div');
+              html.innerHTML = output.response_html;
+              div.appendChild(html);
+            }
+
+            if (textToSpeechEnabled) {
+              speak(output.response_text);
+            }
+          }));
     }
   }
 
@@ -59,6 +38,7 @@ export default function Text() {
     let br = document.createElement("br");
     let div = document.getElementById("titleDiv");
     let output = document.createElement("output");
+    output.style.color = "#fff";
     output.value = "Google Assistant: " + outVal;
     div.appendChild(output);
     div.appendChild(br);

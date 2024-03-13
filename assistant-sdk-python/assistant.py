@@ -103,9 +103,9 @@ class SampleTextAssistant(object):
             if resp.screen_out.data:
                 html_response = resp.screen_out.data
                 soup = BeautifulSoup(html_response, "html.parser")
-                card = soup.find("div", id = "assistant-card-content")
-                if card:
-                    text_response = card.get_text(separator = "\n", strip = True)
+                html_response = soup.find("div", id = "assistant-card-content")
+                if html_response:
+                    text_response = html_response.get_text(separator = "\n", strip = True)
             if resp.dialog_state_out.conversation_state:
                 conversation_state = resp.dialog_state_out.conversation_state
                 self.conversation_state = conversation_state
@@ -181,7 +181,12 @@ def main(api_endpoint, credentials,
 def send(user_query):
     response_text, response_html = assistant.assist(text_query=user_query)
 
-    return jsonify({'response_text': response_text})
+    if (user_query == "hi" or user_query == "test" or user_query == "joke"):
+        return jsonify({'response_text': response_text, 'response_html': ""})
+    else:
+        response_text2, response_html2 = assistant.assist(text_query="what")
+        response_text2 = response_text2.replace("Sure: ", "")
+        return jsonify({'response_text': response_text2, 'response_html': str(response_html)})
 
 if __name__ == '__main__':
     main()

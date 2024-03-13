@@ -1,10 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef } from 'react';
 
 const letters = {
   "A":"weather",
   "B":"",
   "C":"",
-  "D":"",
+  "D":"date",
   "E":"",
   "F":"",
   "G":"",
@@ -17,9 +17,9 @@ const letters = {
   "O":"",
   "P":"",
   "Q":"",
-  "R":"",
+  "R":"restaurants",
   "S":"",
-  "T":"test",
+  "T":"time",
   "U":"",
   "V":"",
   "W":"weather",
@@ -31,7 +31,6 @@ export default function Camera() {
 
   const videoRef = useRef(null);
   let currentStream; // Variable to store the current stream
-  //const [predictionText, setPredictionText] = useState('');
   
   // Function to start the video stream
   const startVideoStream = () => {
@@ -75,32 +74,44 @@ export default function Camera() {
     return currentStream !== undefined && currentStream.active;
   };
 
-  // funky stuff...
+  // Display Google Assistant response
   function addOutput(outVal){
     let br = document.createElement("br");
     let div = document.getElementById("titleDiv");
     let output = document.createElement("output");
+    output.style.color = "#fff";
     output.value = "Google Assistant: " + outVal;
     div.appendChild(output);
     div.appendChild(br);
-    
   }
 
+  // Display user input
   function addInputSign(prediction){
     let br = document.createElement("br");
     let div = document.getElementById("titleDiv");
     let input = document.createElement("output");
-    input.value = "You: " + letters[prediction];
+    input.style.color = "#fff";
+    input.value = "You: " + letters[prediction] + "(" + prediction + ")";
     div.appendChild(input);
     div.appendChild(br);
 
-    // Sends the typed text to the backend and receive a response from the assistant
-    // This should eventually show the signed input as text and appropriate response
+    // Sends the signed text to the backend and receive a response from the assistant
     let path = window.location.protocol + "//" + window.location.hostname + ":4000/send/" + letters[prediction];
-    fetch(path).then(res => res.text()
-    .then(data => {
-      const output = JSON.parse(data).response_text
-      addOutput(output);
+    fetch(path)
+    .then(res => res.text()
+      .then(data => {
+        const output = JSON.parse(data);
+        addOutput(output.response_text);
+          
+        if (output.response_html !== "") {
+          let html = document.createElement('div');
+          html.innerHTML = output.response_html;
+          div.appendChild(html);
+        }
+
+        // if (textToSpeechEnabled) {
+        //   speak(output.response_text);
+        // }
     }));
   }
 
