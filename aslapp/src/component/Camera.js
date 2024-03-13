@@ -1,30 +1,30 @@
 import React, { useRef, useState, useEffect } from 'react';
 
 const letters = {
-  "a":"",
-  "b":"",
-  "c":"",
-  "d":"",
-  "e":"",
-  "f":"",
-  "g":"",
-  "h":"hi",
-  "i":"",
-  "k":"",
-  "l":"",
-  "m":"",
-  "n":"",
-  "o":"",
-  "p":"",
-  "q":"",
-  "r":"",
-  "s":"",
-  "t":"test",
-  "u":"",
-  "v":"",
-  "w":"weather",
-  "x":"",
-  "y":"",
+  "A":"weather",
+  "B":"",
+  "C":"",
+  "D":"",
+  "E":"",
+  "F":"",
+  "G":"",
+  "H":"hi",
+  "I":"",
+  "K":"",
+  "L":"",
+  "M":"",
+  "N":"",
+  "O":"",
+  "P":"",
+  "Q":"",
+  "R":"",
+  "S":"",
+  "T":"test",
+  "U":"",
+  "V":"",
+  "W":"weather",
+  "X":"",
+  "Y":"weather",
 };
 
 export default function Camera() {
@@ -99,7 +99,8 @@ export default function Camera() {
     let path = window.location.protocol + "//" + window.location.hostname + ":4000/send/" + letters[prediction];
     fetch(path).then(res => res.text()
     .then(data => {
-      addOutput(data);
+      const output = JSON.parse(data).response_text
+      addOutput(output);
     }));
   }
 

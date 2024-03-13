@@ -45,9 +45,11 @@ export default function Text() {
       fetch(path)
         .then(res => res.text())
         .then(data => {
-          addOutput(data);
+          const output = JSON.parse(data).response_text;
+          addOutput(output);
+          
           if (textToSpeechEnabled) {
-            speak(data);
+            speak(output);
           }
         });
     }
