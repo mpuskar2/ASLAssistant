@@ -14,8 +14,7 @@ mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 hands = mp_hands.Hands(static_image_mode=True, max_num_hands=1, min_detection_confidence=0.3)
 
-DATA_PATH = '../../model/Data'
-letters = [d for d in os.listdir(DATA_PATH) if os.path.isdir(os.path.join(DATA_PATH, d))]
+letters = [chr(letter) for letter in range(ord('A'), ord('Z')+1) if chr(letter) not in ('J', 'Z')]
 
 model = load_model('../../model/Models/ASL_model.h5')
 
