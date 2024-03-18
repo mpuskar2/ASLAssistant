@@ -24,9 +24,10 @@
   color: white;
 }
 
-body{
+body {
   padding: 100px;
   background-color: rgba(25, 25, 25, .97);
+  font-family: Roboto,sans-serif;
 }
 
 button {
@@ -52,6 +53,14 @@ button:hover {
 
 .App-link {
   color: #61dafb;
+}
+
+.whiteText {
+  color: white;
+}
+
+#iTable {
+  width: 100%;
 }
 
 @keyframes App-logo-spin {

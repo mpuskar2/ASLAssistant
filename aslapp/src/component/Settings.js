@@ -14,76 +14,61 @@ export default function Settings() {
 
   function renderSettings() {
     return (
-      <div>
-        Welcome to the ASL to assistant tool!
-        <br></br>
-        To start click the button below to show what letters you can sign into the camera and what commands they are linked to.
-        <br></br>
-        Once you start signing you will get a responce from the assistant which you can have read out to you via text to speach if you would like by enabling text to speach with the button bellow.
-        <br></br>
-        You can clear the chat history by clicking the clear chat button.
-        <br></br>
-        If you would prefer typing your comand you can use the text input feild and click send.
-        <br></br>
-        <button onClick={toggleAdditionalDiv}>Show letter to comand legend</button>
+      <div className="whiteText">
+        <h2>Welcome to the ASL assistant tool!</h2>
+        <p>
+        To start click the button below to show what letters you can sign into the camera and what commands they are linked to. <br/>
+        Once you start signing you will get a response from the assistant which you can have read out to you via text to speech if you would like by enabling text to speech with the button below. <br/>
+        You can clear the chat history by clicking the clear chat button. <br/>
+        If you would prefer typing your command you can use the text input field and click send. <br/>
+        </p>
+        <button onClick={toggleAdditionalDiv}>Show letter to command legend</button>
       </div>
     );
   }
 
   function renderAdditionalDiv() {
     return (
-      <div>
-        Here is the legend:
-        <br></br>
-        a = 
-        <br></br>
-        b = 
-        <br></br>
-        c = 
-        <br></br>
-        d = 
-        <br></br>
-        e = 
-        <br></br>
-        f = 
-        <br></br>
-        g = 
-        <br></br>
-        h = Hi
-        <br></br>
-        i = 
-        <br></br>
-        j = 
-        <br></br>
-        l = 
-        <br></br>
-        m = 
-        <br></br>
-        n = 
-        <br></br>
-        o = 
-        <br></br>
-        p = 
-        <br></br>
-        q = 
-        <br></br>
-        r = 
-        <br></br>
-        s = 
-        <br></br>
-        t = test
-        <br></br>
-        u = 
-        <br></br>
-        v = 
-        <br></br>
-        w = weather
-        <br></br>
-        x = 
-        <br></br>
-        y = 
-        <br></br>
-        z = 
+      <div className="whiteText">
+          <h2>Here is the legend:</h2>
+          <table id="iTable">
+            <tr>
+              <td>A = </td>
+              <td>G = </td>
+              <td>N = </td>
+              <td>T = </td>
+            </tr>
+            <tr>
+              <td>B = </td>
+              <td>H = </td>
+              <td>O = </td>
+              <td>U = </td>
+            </tr>
+            <tr>
+              <td>C = </td>
+              <td>I = </td>
+              <td>P = </td>
+              <td>V = </td>
+            </tr>
+            <tr>
+              <td>D = </td>
+              <td>K = </td>
+              <td>Q = </td>
+              <td>W = </td>
+            </tr>
+            <tr>
+              <td>E = </td>
+              <td>L = </td>
+              <td>R = </td>
+              <td>X = </td>
+            </tr>
+            <tr>
+              <td>F = </td>
+              <td>M = </td>
+              <td>S = </td>
+              <td>Y = </td>
+            </tr>
+          </table>
       </div>
     );
   }
