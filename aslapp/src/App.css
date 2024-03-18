@@ -27,8 +27,9 @@
 body {
   padding: 100px;
   background-color: rgba(25, 25, 25, .97);
-  font-family: Roboto,sans-serif;
 }
+
+* { font-family: Roboto,sans-serif !important;}
 
 button {
   background: #303030;
@@ -51,12 +52,36 @@ button:hover {
   outline:none;
 }
 
+input {
+  background: #303030;
+  border: none;
+  border-radius: 22px;
+  color: #ffffff;
+  font-size: 24px;
+  width: 25%;
+  height: 48px;
+  line-height: 32px;
+  outline: none;
+  margin: 0 32px 0 0;
+  padding: 0px 21px;
+}
+
 .App-link {
   color: #61dafb;
 }
 
 .whiteText {
   color: white;
+}
+
+.centerText {
+  text-align: center;
+  
+}
+
+.title {
+  color: white;
+  text-align: center;
 }
 
 #iTable {

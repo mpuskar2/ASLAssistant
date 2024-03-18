@@ -56,12 +56,15 @@ export default function Text() {
 
   return (
     <>
-      <input type="text" id="chatbox-input-text" placeholder="Type your message here..." />
-      <button onClick={() => addInput()} id="chatbox-input-submit">Send</button>
-      <button onClick={() => setTextToSpeechEnabled(!textToSpeechEnabled)}>
-        {textToSpeechEnabled ? 'Disable Text-to-Speech' : 'Enable Text-to-Speech'}
-      </button>
-      <button onClick={() => clearChatLog()}>Clear Chat</button>
+      <div className="centerText">
+        <br/>
+        <input type="text" id="chatbox-input-text" placeholder="Type your message here..." />
+        <button onClick={() => addInput()} id="chatbox-input-submit">Send</button>
+        <button onClick={() => setTextToSpeechEnabled(!textToSpeechEnabled)}>
+          {textToSpeechEnabled ? 'Disable Text-to-Speech' : 'Enable Text-to-Speech'}
+        </button>
+        <button onClick={() => clearChatLog()}>Clear Chat</button>
+      </div>
       <div id="titleDiv" class="conversation"></div>
     </>
   );
