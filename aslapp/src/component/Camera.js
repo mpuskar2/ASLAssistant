@@ -79,7 +79,6 @@ export default function Camera() {
     let br = document.createElement("br");
     let div = document.getElementById("titleDiv");
     let output = document.createElement("output");
-    output.style.color = "#fff";
     output.value = "Google Assistant: " + outVal;
     div.appendChild(output);
     div.appendChild(br);
@@ -90,8 +89,7 @@ export default function Camera() {
     let br = document.createElement("br");
     let div = document.getElementById("titleDiv");
     let input = document.createElement("output");
-    input.style.color = "#fff";
-    input.value = "You: " + letters[prediction] + "(" + prediction + ")";
+    input.value = "You: " + letters[prediction] + " (" + prediction + ")";
     div.appendChild(input);
     div.appendChild(br);
 
@@ -133,7 +131,8 @@ export default function Camera() {
         formData.append('image', blob, 'image.jpg');
 
         // Make a POST request using fetch
-        fetch('http://localhost:5000/upload', {
+        let uploadPath = window.location.protocol + "//" + window.location.hostname + ":4000/upload";
+        fetch(uploadPath, {
             method: 'POST',
             body: formData,
         })

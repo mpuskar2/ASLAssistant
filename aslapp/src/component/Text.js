@@ -10,7 +10,6 @@ export default function Text() {
     if (inVal !== "") {
       let div = document.getElementById("titleDiv");
       let input = document.createElement("output");
-      input.style.color = "#fff";
       input.value = "You: " + inVal;
       div.appendChild(input);
       div.appendChild(br);
@@ -38,7 +37,6 @@ export default function Text() {
     let br = document.createElement("br");
     let div = document.getElementById("titleDiv");
     let output = document.createElement("output");
-    output.style.color = "#fff";
     output.value = "Google Assistant: " + outVal;
     div.appendChild(output);
     div.appendChild(br);

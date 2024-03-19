@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
 from bs4 import BeautifulSoup
 import os
@@ -10,6 +10,12 @@ import google.auth.transport.grpc
 import google.auth.transport.requests
 import google.oauth2.credentials
 
+import cv2
+import mediapipe as mp
+import numpy as np
+from tensorflow.keras.models import load_model
+from PIL import Image
+
 from v1alpha2 import (
     embedded_assistant_pb2,
     embedded_assistant_pb2_grpc
@@ -17,20 +23,43 @@ from v1alpha2 import (
 
 try:
     from . import (
-        assistant_helpers,
-        browser_helpers,
+        assistant_helpers
     )
 except (SystemError, ImportError):
     import assistant_helpers
-    import browser_helpers
 
 app = Flask(__name__)
 CORS(app)
 
+# ASL model
+mp_hands = mp.solutions.hands
+mp_drawing = mp.solutions.drawing_utils
+hands = mp_hands.Hands(static_image_mode=True, max_num_hands=1, min_detection_confidence=0.3)
+
+letters = [chr(letter) for letter in range(ord('A'), ord('Z')+1) if chr(letter) not in ('J', 'Z')]
+
+model = load_model('../model/Models/ASL_model.h5')
+
+# Returns ASL sign detected in frame as text
+def return_prediction(frame):
+    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    res = hands.process(frame_rgb)
+
+    # Make Prediction and yield result
+    predict_text = ""
+    if res.multi_hand_landmarks:
+        for hand_landmarks in res.multi_hand_landmarks:
+            hand_sequence = np.array([[landmark.x, landmark.y] for landmark in hand_landmarks.landmark])
+            hand_sequence = hand_sequence.reshape(1, -1)
+            pred = model.predict(hand_sequence)
+            predict_text = letters[np.argmax(pred)]
+    return predict_text
+
+
+# Google Assistant API
 ASSISTANT_API_ENDPOINT = 'embeddedassistant.googleapis.com'
 DEFAULT_GRPC_DEADLINE = 60 * 3 + 5
 PLAYING = embedded_assistant_pb2.ScreenOutConfig.PLAYING
-
 
 class SampleTextAssistant(object):
     """Sample Assistant that supports text based conversations.
@@ -146,12 +175,14 @@ class SampleTextAssistant(object):
 @click.option('--grpc-deadline', default=DEFAULT_GRPC_DEADLINE,
               metavar='<grpc deadline>', show_default=True,
               help='gRPC deadline in seconds')
+
+
 def main(api_endpoint, credentials,
          device_model_id, device_id, lang, display, verbose,
          grpc_deadline, *args, **kwargs):
     # Setup logging.
-    logging.basicConfig(level=logging.DEBUG if verbose else logging.INFO)
-
+    logging.basicConfig(level=logging.DEBUG if verbose else logging.ERROR)
+    logging.getLogger("werkzeug").disabled = True
     # Load OAuth 2.0 credentials.
     try:
         with open(credentials, 'r') as f:
@@ -187,6 +218,19 @@ def send(user_query):
         response_text2, response_html2 = assistant.assist(text_query="what")
         response_text2 = response_text2.replace("Sure: ", "")
         return jsonify({'response_text': response_text2, 'response_html': str(response_html)})
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    data = request.files['image']
+    pil_image = Image.open(data)
+    # Convert the PIL Image to format acceptable by cv2
+    new_image = np.array(pil_image)
+    prediction_text = return_prediction(new_image)
+    return jsonify(prediction_text=prediction_text)
 
 if __name__ == '__main__':
     main()

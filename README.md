@@ -18,7 +18,6 @@ Unix:
 * python3 -m venv env
 * env/bin/python -m pip install --upgrade pip setuptools wheel
 * source env/bin/activate
-* cd assistant-sdk-python
 * pip install --upgrade -r requirements.txt
 * google-oauthlib-tool --scope https://www.googleapis.com/auth/assistant-sdk-prototype --save --client-secrets /path/to/client_secret_client-id.json
 
@@ -26,9 +25,9 @@ Windows:
 * python -m venv env
 * env\Scripts\python -m pip install --upgrade pip setuptools wheel
 * env\Scripts\activate
-* cd assistant-sdk-python
 * pip install --upgrade -r requirements.txt
 * google-oauthlib-tool --scope https://www.googleapis.com/auth/assistant-sdk-prototype --save --client-secrets /path/to/client_secret_client-id.json
 
 Run backend with:
-python -m textinput --device-model-id "MODEL-ID" --device-id "DEVICE-ID"
+* cd assistant-sdk-python
+* python -m assistant --device-model-id "MODEL-ID" --device-id "DEVICE-ID"

@@ -79,6 +79,10 @@ input {
   
 }
 
+.conversation {
+  color: white;
+}
+
 .title {
   color: white;
   text-align: center;
