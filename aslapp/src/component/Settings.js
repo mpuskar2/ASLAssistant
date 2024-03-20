@@ -33,40 +33,40 @@ export default function Settings() {
           <h2>Here is the legend:</h2>
           <table id="iTable">
             <tr>
-              <td>A = </td>
-              <td>G = </td>
-              <td>N = </td>
-              <td>T = </td>
+              <td>A = Where's the nearest ATM?</td>
+              <td>G = Tell me a joke</td>
+              <td>N = When does the sun rise?</td>
+              <td>T = What's the time?</td>
             </tr>
             <tr>
-              <td>B = </td>
-              <td>H = </td>
-              <td>O = </td>
-              <td>U = </td>
+              <td>B = When does the bus to get to Masonville Place come?</td>
+              <td>H = What are the Western Rec Center hours?</td>
+              <td>O = Roll a dice</td>
+              <td>U = Do I need an umbrella?</td>
             </tr>
             <tr>
-              <td>C = </td>
-              <td>I = </td>
-              <td>P = </td>
-              <td>V = </td>
+              <td>C = Flip a coin</td>
+              <td>I = Directions to Toronto</td>
+              <td>P = Read me a poem</td>
+              <td>V = Do I need an umbrella?</td>
             </tr>
             <tr>
-              <td>D = </td>
-              <td>K = </td>
-              <td>Q = </td>
-              <td>W = </td>
+              <td>D = What's the date?</td>
+              <td>K = What's 20% of 40?</td>
+              <td>Q = Directions to nearest restaurant</td>
+              <td>W = What's the weather?</td>
             </tr>
             <tr>
-              <td>E = </td>
-              <td>L = </td>
-              <td>R = </td>
-              <td>X = </td>
+              <td>E = When is the bus to get home?</td>
+              <td>L = How much protein is in an egg?</td>
+              <td>R = What are some nearby restaurants?</td>
+              <td>X = What will the weather be tomorrow?</td>
             </tr>
             <tr>
-              <td>F = </td>
-              <td>M = </td>
-              <td>S = </td>
-              <td>Y = </td>
+              <td>F = Tell me a fun fact</td>
+              <td>M = Where's the nearest pharmacy?</td>
+              <td>S = When does the sun set?</td>
+              <td>Y = What will the weather be next week?</td>
             </tr>
           </table>
       </div>
