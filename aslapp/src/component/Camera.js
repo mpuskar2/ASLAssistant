@@ -27,11 +27,10 @@ const letters = {
   "Y":"What will the weather be next week?",
 };
 
-export default function Camera() {
+export default function Camera({ttsEnabled}) {
 
   const videoRef = useRef(null);
   let currentStream; // Variable to store the current stream
-  
   // Function to start the video stream
   const startVideoStream = () => {
     navigator.mediaDevices.getUserMedia({ video: true })
@@ -107,9 +106,11 @@ export default function Camera() {
           div.appendChild(html);
         }
 
-        // if (textToSpeechEnabled) {
-        //   speak(output.response_text);
-        // }
+        if (ttsEnabled) {
+          var audioElement = new Audio();
+          audioElement.src = "data:audio/ogg;base64," + output.audio_response;
+          audioElement.play();
+        }
     }));
   }
 
@@ -153,19 +154,10 @@ export default function Camera() {
                 console.error('Error uploading the image:', error);
             });
     }, 'image/jpeg'); // Specify the desired MIME type
-/*
-      // Convert the canvas to an image
-      let image = new Image();
-      image.src = canvas.toDataURL('image/png');
-
-      // Display image in the page body
-      // This should go to the model input once connected
-      document.body.removeChild(document.body.lastChild);
-      document.body.appendChild(image); */
     }
   };
 
-  // Capture an image every 83 ms ~ 12 fps
+  // Capture an image every 2000 ms ~ 0.5 fps
   setInterval(() => {
     captureImage();
   }, 2000);
@@ -178,7 +170,6 @@ export default function Camera() {
     <button onClick={() => stopVideoStream()}>Stop Camera</button>
     <button onClick={() => restartVideoStream()}>Start Camera</button>
     </center>
-    {/*<Text predictionText={predictionText} />*/}
     </>
   )
 }

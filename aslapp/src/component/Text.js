@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-export default function Text() {
-  const [textToSpeechEnabled, setTextToSpeechEnabled] = useState(false);
+export default function Text({ttsEnabled, setttsEnabled}) {
 
   function addInput() {
     let br = document.createElement("br");
@@ -26,7 +25,7 @@ export default function Text() {
               div.appendChild(html);
             }
 
-            if (textToSpeechEnabled) {
+            if (ttsEnabled) {
               var audioElement = new Audio();
               audioElement.src = "data:audio/ogg;base64," + output.audio_response;
               audioElement.play();
@@ -54,8 +53,11 @@ export default function Text() {
         <br/>
         <input type="text" id="chatbox-input-text" placeholder="Type your message here..." />
         <button onClick={() => addInput()} id="chatbox-input-submit">Send</button>
-        <button onClick={() => setTextToSpeechEnabled(!textToSpeechEnabled)}>
+        {/* <button onClick={() => setTextToSpeechEnabled(!textToSpeechEnabled)}>
           {textToSpeechEnabled ? 'Disable Text-to-Speech' : 'Enable Text-to-Speech'}
+        </button> */}
+        <button onClick={() => setttsEnabled(!ttsEnabled)}>
+          {ttsEnabled ? 'Disable Text-to-Speech' : 'Enable Text-to-Speech'}
         </button>
         <button onClick={() => clearChatLog()}>Clear Chat</button>
       </div>

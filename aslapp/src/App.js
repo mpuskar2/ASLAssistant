@@ -5,13 +5,16 @@ import Camera from './component/Camera';
 import Text from './component/Text';
 import Title from './component/Title';
 
+import React, { useState } from 'react';
+
 function App() {
+  const [ttsEnabled, setttsEnabled] = useState(false);
   return (
     <>
     <Title/>
     <Settings/>
-    <Camera/>
-    <Text/>
+    <Camera ttsEnabled={ttsEnabled}/>
+    <Text ttsEnabled={ttsEnabled} setttsEnabled={setttsEnabled}/>
     </>
   );
 }
