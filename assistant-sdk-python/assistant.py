@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import os
 import logging
 import json
+import base64
 
 import click
 import google.auth.transport.grpc
@@ -101,9 +102,9 @@ class SampleTextAssistant(object):
         def iter_assist_requests():
             config = embedded_assistant_pb2.AssistConfig(
                 audio_out_config=embedded_assistant_pb2.AudioOutConfig(
-                    encoding='LINEAR16',
-                    sample_rate_hertz=16000,
-                    volume_percentage=0,
+                    encoding='MP3',
+                    sample_rate_hertz=24000,
+                    volume_percentage=100,
                 ),
                 dialog_state_in=embedded_assistant_pb2.DialogStateIn(
                     language_code=self.language_code,
@@ -126,6 +127,8 @@ class SampleTextAssistant(object):
 
         text_response = None
         html_response = None
+        audio_response = b""
+        show_text_content = None
         for resp in self.assistant.Assist(iter_assist_requests(),
                                           self.deadline):
             assistant_helpers.log_assist_response_without_audio(resp)
@@ -133,6 +136,7 @@ class SampleTextAssistant(object):
                 html_response = resp.screen_out.data
                 soup = BeautifulSoup(html_response, "html.parser")
                 html_response = soup.find("div", id = "assistant-card-content")
+                show_text_content = soup.find("div", {"class": "show_text_content"})
                 if html_response:
                     text_response = html_response.get_text(separator = "\n", strip = True)
             if resp.dialog_state_out.conversation_state:
@@ -140,7 +144,9 @@ class SampleTextAssistant(object):
                 self.conversation_state = conversation_state
             if resp.dialog_state_out.supplemental_display_text:
                 text_response = resp.dialog_state_out.supplemental_display_text
-        return text_response, html_response
+            if resp.audio_out.audio_data:
+                audio_response += resp.audio_out.audio_data
+        return text_response, html_response, audio_response, show_text_content
 
 
 @click.command()
@@ -210,14 +216,20 @@ def main(api_endpoint, credentials,
 
 @app.route('/send/<user_query>', methods=['GET'])
 def send(user_query):
-    response_text, response_html = assistant.assist(text_query=user_query)
+    response_text, response_html, audio_response, show_text_content = assistant.assist(text_query=user_query)
 
-    if (user_query == "hi" or user_query == "test" or user_query == "joke"):
-        return jsonify({'response_text': response_text, 'response_html': ""})
+    audio = base64.b64encode(audio_response).decode('ascii')
+
+    if (show_text_content):
+        return jsonify({'response_text': response_text, 'response_html': "", 'audio_response': audio})
     else:
-        response_text2, response_html2 = assistant.assist(text_query="what")
+        response_text2, response_html2, audio_response2, show_text_content2 = assistant.assist(text_query="what")
+        
         response_text2 = response_text2.replace("Sure: ", "")
-        return jsonify({'response_text': response_text2, 'response_html': str(response_html)})
+        if (response_html != None):
+            return jsonify({'response_text': response_text2, 'response_html': str(response_html), 'audio_response': audio})
+        else:
+            return jsonify({'response_text': response_text2, 'response_html': "", 'audio_response': audio})
 
 @app.route('/')
 def index():

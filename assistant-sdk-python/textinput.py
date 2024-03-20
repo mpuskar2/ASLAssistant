@@ -68,9 +68,9 @@ class SampleTextAssistant(object):
         def iter_assist_requests():
             config = embedded_assistant_pb2.AssistConfig(
                 audio_out_config=embedded_assistant_pb2.AudioOutConfig(
-                    encoding='LINEAR16',
-                    sample_rate_hertz=16000,
-                    volume_percentage=0,
+                    encoding='MP3',
+                    sample_rate_hertz=24000,
+                    volume_percentage=100,
                 ),
                 dialog_state_in=embedded_assistant_pb2.DialogStateIn(
                     language_code=self.language_code,
@@ -93,6 +93,7 @@ class SampleTextAssistant(object):
 
         text_response = None
         html_response = None
+        audio_response = b""
         for resp in self.assistant.Assist(iter_assist_requests(),
                                           self.deadline):
             assistant_helpers.log_assist_response_without_audio(resp)
@@ -107,7 +108,9 @@ class SampleTextAssistant(object):
                 self.conversation_state = conversation_state
             if resp.dialog_state_out.supplemental_display_text:
                 text_response = resp.dialog_state_out.supplemental_display_text
-        return text_response, html_response
+            if resp.audio_out.audio_data:
+                audio_response += resp.audio_out.audio_data
+        return text_response, html_response, audio_response
 
 
 @click.command()
@@ -171,12 +174,14 @@ def main(api_endpoint, credentials,
         while True:
             query = click.prompt('')
             click.echo('<you> %s' % query)
-            response_text, response_html = assistant.assist(text_query=query)
+            response_text, response_html, audio_response = assistant.assist(text_query=query)
+            system_browser = browser_helpers.system_browser
             if display and response_html:
-                system_browser = browser_helpers.system_browser
-                system_browser.display(response_html)
+                system_browser.display(response_html, "google-assistant-sdk-screen-out.html")
             if response_text:
                 click.echo('<@assistant> %s' % response_text)
+            if audio_response:
+                system_browser.display(audio_response, "google-assistant-sdk-audio-out.mp3")
 
 
 if __name__ == '__main__':

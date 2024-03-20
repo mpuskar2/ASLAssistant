@@ -27,7 +27,9 @@ export default function Text() {
             }
 
             if (textToSpeechEnabled) {
-              speak(output.response_text);
+              var audioElement = new Audio();
+              audioElement.src = "data:audio/ogg;base64," + output.audio_response;
+              audioElement.play();
             }
           }));
     }
@@ -40,12 +42,6 @@ export default function Text() {
     output.value = "Google Assistant: " + outVal;
     div.appendChild(output);
     div.appendChild(br);
-  }
-
-  function speak(text) {
-    const synth = window.speechSynthesis;
-    const utterance = new SpeechSynthesisUtterance(text);
-    synth.speak(utterance);
   }
 
   function clearChatLog() {
