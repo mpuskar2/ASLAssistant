@@ -211,7 +211,7 @@ def main(api_endpoint, credentials,
     assistant = SampleTextAssistant(lang, device_model_id, device_id, display,
                              grpc_channel, grpc_deadline)
     
-    app.run(port=4000)
+    app.run(host='0.0.0.0', port=4000)
 
 
 @app.route('/send/<user_query>', methods=['GET'])

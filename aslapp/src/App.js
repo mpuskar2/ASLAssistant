@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import Settings from './component/Settings';
 import Camera from './component/Camera';
