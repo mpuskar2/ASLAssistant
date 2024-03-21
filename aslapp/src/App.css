@@ -44,6 +44,19 @@ button {
   padding: 0px 21px;
 }
 
+select {
+  background: #303030;
+  border: none;
+  border-radius: 22px;
+  color: #ffffff;
+  font-size: 24px;
+  height: 48px;
+  line-height: 32px;
+  outline: none;
+  margin: 0 32px 0 0;
+  padding: 0px 21px;
+}
+
 button:hover {
   background-color:#424242;
   -ms-transform:scale(1.1,1.1);

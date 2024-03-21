@@ -2,34 +2,7 @@ import React, { useRef } from 'react';
 
 var delay = false;
 
-const letters = {
-  "A":"Where's the nearest ATM?",
-  "B":"When does the bus to get to Masonville Place come?",
-  "C":"Flip a coin",
-  "D":"What's the date?",
-  "E":"When is the bus to get home?",
-  "F":"Tell me a fun fact",
-  "G":"Tell me a joke",
-  "H":"What are the Western Rec Center hours?",
-  "I":"Directions to Toronto",
-  "K":"What's 20% of 40?",
-  "L":"How much protein is in an egg?",
-  "M":"Where's the nearest pharmacy?",
-  "N":"When does the sun rise?",
-  "O":"Roll a dice",
-  "P":"Read me a poem",
-  "Q":"Directions to nearest restaurant",
-  "R":"What are some nearby restaurants?",
-  "S":"When does the sun set?",
-  "T":"What's the time?",
-  "U":"Do I need an umbrella?",
-  "V":"Do I need an umbrella?",
-  "W":"What's the weather?",
-  "X":"What will the weather be tomorrow?",
-  "Y":"What will the weather be next week?",
-};
-
-export default function Camera({ttsEnabled}) {
+export default function Camera({ttsEnabled, commands}) {
 
   const videoRef = useRef(null);
   let currentStream; // Variable to store the current stream
@@ -91,12 +64,12 @@ export default function Camera({ttsEnabled}) {
     let br = document.createElement("br");
     let div = document.getElementById("titleDiv");
     let input = document.createElement("output");
-    input.value = "You: " + letters[prediction] + " (" + prediction + ")";
+    input.value = "You: " + commands[prediction] + " (" + prediction + ")";
     div.appendChild(input);
     div.appendChild(br);
 
     // Sends the signed text to the backend and receive a response from the assistant
-    let path = window.location.protocol + "//" + window.location.hostname + ":4000/send/" + letters[prediction];
+    let path = window.location.protocol + "//" + window.location.hostname + ":4000/send/" + commands[prediction];
     fetch(path)
     .then(res => res.text()
       .then(data => {
@@ -116,7 +89,7 @@ export default function Camera({ttsEnabled}) {
         }
 
         setTimeout(() => {
-          //console.log("Delay");
+          console.log("Delay");
           delay = false;
         }, 3000);
     }));
@@ -131,7 +104,6 @@ export default function Camera({ttsEnabled}) {
       canvas.height = video.videoHeight; // set image height
       let context = canvas.getContext('2d');
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
 
       // Convert the canvas image to a Blob
       canvas.toBlob(function (blob) {
@@ -165,10 +137,10 @@ export default function Camera({ttsEnabled}) {
     }
   };
 
-  // Capture an image every 300 ms ~ 3.33 fps
+  // Capture an image every 1000 ms, 1 fps
   setInterval(() => {
     captureImage();
-  }, 300);
+  }, 1000);
 
   return(
     <>

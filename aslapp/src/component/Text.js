@@ -5,6 +5,8 @@ export default function Text({ttsEnabled, setttsEnabled}) {
   function addInput() {
     let br = document.createElement("br");
     let inVal = document.getElementById("chatbox-input-text").value;
+    inVal = inVal.replace(/[^\w\s]/gi, '');
+    inVal = inVal.trim();
 
     if (inVal !== "") {
       let div = document.getElementById("titleDiv");
@@ -32,6 +34,9 @@ export default function Text({ttsEnabled, setttsEnabled}) {
             }
           }));
     }
+    else {
+      alert("Field cannot be blank");
+    }
   }
 
   function addOutput(outVal) {
@@ -53,9 +58,6 @@ export default function Text({ttsEnabled, setttsEnabled}) {
         <br/>
         <input type="text" id="chatbox-input-text" placeholder="Type your message here..." />
         <button onClick={() => addInput()} id="chatbox-input-submit">Send</button>
-        {/* <button onClick={() => setTextToSpeechEnabled(!textToSpeechEnabled)}>
-          {textToSpeechEnabled ? 'Disable Text-to-Speech' : 'Enable Text-to-Speech'}
-        </button> */}
         <button onClick={() => setttsEnabled(!ttsEnabled)}>
           {ttsEnabled ? 'Disable Text-to-Speech' : 'Enable Text-to-Speech'}
         </button>
