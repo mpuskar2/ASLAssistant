@@ -1,5 +1,7 @@
 import React, { useRef } from 'react';
 
+var delay = false;
+
 const letters = {
   "A":"Where's the nearest ATM?",
   "B":"When does the bus to get to Masonville Place come?",
@@ -85,6 +87,7 @@ export default function Camera({ttsEnabled}) {
 
   // Display user input
   function addInputSign(prediction){
+    delay = true;
     let br = document.createElement("br");
     let div = document.getElementById("titleDiv");
     let input = document.createElement("output");
@@ -111,12 +114,17 @@ export default function Camera({ttsEnabled}) {
           audioElement.src = "data:audio/ogg;base64," + output.audio_response;
           audioElement.play();
         }
+
+        setTimeout(() => {
+          //console.log("Delay");
+          delay = false;
+        }, 3000);
     }));
   }
 
   // Capture an image
   const captureImage = () => {
-    if (isCameraRunning()) {
+    if (isCameraRunning() && !delay) {
       let video = videoRef.current;
       let canvas = document.createElement('canvas');
       canvas.width = video.videoWidth; // set image width
@@ -157,10 +165,10 @@ export default function Camera({ttsEnabled}) {
     }
   };
 
-  // Capture an image every 2000 ms ~ 0.5 fps
+  // Capture an image every 300 ms ~ 3.33 fps
   setInterval(() => {
     captureImage();
-  }, 2000);
+  }, 300);
 
   return(
     <>
